@@ -1,0 +1,19 @@
+{
+    "name": "emfibben",
+    "version": "1.0.0",
+    "description": "A template for kick starting a Cloudflare Workers project",
+    "main": "index.js",
+    "scripts": {
+        "build": "mkdir -p build && docker run --rm -v $(pwd):/src trzeci/emscripten emcc -Oz -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\"]' -s ALLOW_MEMORY_GROWTH=1 -s DYNAMIC_EXECUTION=0 -s TEXTDECODER=0 -s MODULARIZE=1 -s ENVIRONMENT='web' -s 'EXPORT_NAME=\"emscripten\"' --pre-js './pre.js' -o ./build/module.js ./src/fibonacci.c",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format": "prettier --write '**/*.{js,css,json,md}'"
+    },
+    "author": "Matthew Alonso <granjef3@gmail.com>",
+    "license": "MIT",
+    "devDependencies": {
+        "copy-webpack-plugin": "^5.0.3",
+        "exports-loader": "^0.7.0",
+        "webpack-shell-plugin-next": "^0.6.4"
+    },
+    "dependencies": {}
+}
