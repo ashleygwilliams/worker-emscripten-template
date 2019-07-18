@@ -1,15 +1,15 @@
-# 👷 `worker-template` Hello World
+# 👷 `worker-emscripten-template`
 
-A template for kick starting a Cloudflare worker project.
+A template for kick starting a Cloudflare worker project with emscripten
 
-[`index.js`](https://github.com/cloudflare/worker-template/blob/master/index.js) is the content of the Workers script.
+[`index.js`](index.js) is the content of the Workers script.
+[`fib.c`](src/fib.c) is the c source code for a fibonacci calculator.
+[`package.json`](package.json) holds the command we use to call emscripten.
+[`webpack.config.js`](webpack.config.js) holds the webpack config we use to bundle the emscripten output together with your script.
 
 #### Wrangler
 To generate using [wrangler](https://github.com/cloudflare/wrangler)
 
 ```
-wrangler generate myApp https://github.com/cloudflare/worker-template
+wrangler generate myApp https://github.com/cloudflare/worker-emscripten-template
 ```
-
-#### Serverless
-To deploy using serverless add a [`serverless.yml`](https://serverless.com/framework/docs/providers/cloudflare/) file.
