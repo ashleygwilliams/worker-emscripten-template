@@ -1,7 +1,7 @@
 var $ = require("shelljs")
 
 if (!$.which("docker")) {
-  $.echo("This template requires docker to work. Please install docker and try again")
+  $.echo("This template requires docker to work. Please install docker and try again.")
   $.exit(1)
 }
 
