@@ -10,7 +10,8 @@ A template for kick starting a Cloudflare worker project with emscripten
 This template requires [docker](https://docs.docker.com/install/) for providing the emscripten build environment.
 
 #### Wrangler
-To generate using [wrangler](https://github.com/cloudflare/wrangler)
+
+This template requires the ^1.1.0 version of [wrangler](https://github.com/cloudflare/wrangler)
 
 ```
 wrangler generate myapp https://github.com/ashleygwilliams/worker-emscripten-template
