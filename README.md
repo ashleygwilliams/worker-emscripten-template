@@ -3,7 +3,7 @@
 A template for kick starting a Cloudflare worker project with emscripten
 
 [`index.js`](index.js) is the content of the Workers script.  
-[`fibonacci.c`](src/fibonacci.c) is the c source code for a fibonacci calculator.  
+[`main.c`](src/main.c) is the c source code that calls into the stb image resizer library.  
 [`package.json`](package.json) holds the command we use to call emscripten. (as an npm script)  
 [`webpack.config.js`](webpack.config.js) holds the webpack config we use to bundle the emscripten output together with your script.  
 
@@ -17,8 +17,10 @@ This template requires the ^1.1.0 version of [wrangler](https://github.com/cloud
 wrangler generate myapp https://github.com/ashleygwilliams/worker-emscripten-template
 ```
 
-And to see the 12th fibonacci number calculated in C compiled to wasm
+To demo
 
 ```
 wrangler preview
 ```
+
+then change the url to `https://placehold.co/600x400.jpg?width=100`
