@@ -22,7 +22,9 @@ let emscripten_module = new Promise((resolve, reject) => {
     }
   }).then((module) => {
     resolve({
-      fib: module.cwrap("fib", "number", ["number"])
+      init: module.cwrap("init", "number", ["number"]),
+      resize: module.cwrap("resize", "number", ["number", "number"]),
+      module: module
     });
   });
 });
@@ -32,7 +34,40 @@ let emscripten_module = new Promise((resolve, reject) => {
  * @param {Request} request
  */
 async function handleRequest(event) {
-  let C = await emscripten_module;
+  let request = event.request
+  let response = await fetch(request)
 
-  return new Response(C.fib(12));
+  let type = response.headers.get("Content-Type") || ""
+  if (!type.startsWith("image/")) return response
+
+  let width = new URL(request.url).searchParams.get("width")
+  if (!width) return response
+
+  let resizer = await emscripten_module;
+
+  let bytes = new Uint8Array(await response.arrayBuffer());
+
+  let ptr = resizer.init(bytes.length)
+
+  console.log("ptr: " + ptr)
+  console.log("bytes length: " + bytes.length);
+
+  resizer.module.HEAPU8.set(bytes, ptr);
+
+  let newSize = resizer.resize(bytes.length, parseInt(width))
+
+  if (newSize == 0) {
+    console.log("resize didnt happen");
+    return new Response(bytes, response);
+  }
+
+  let resultBytes = resizer.module.HEAPU8.slice(ptr, ptr + newSize)
+
+  // Create a new response with the image bytes. Our resizer module always
+  // outputs JPEG regardless of input type, so change the header.
+  let newResponse = new Response(resultBytes, response)
+  newResponse.headers.set("Content-Type", "image/jpeg")
+
+  // Return the response.
+  return newResponse
 }
