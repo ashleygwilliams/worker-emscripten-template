@@ -4,10 +4,10 @@ A template for kick starting a Cloudflare worker project with emscripten
 
 [`index.js`](index.js) is the content of the Workers script.  
 [`main.c`](src/main.c) is the c source code that calls into the stb image resizer library.  
-[`package.json`](package.json) holds the command we use to call emscripten. (as an npm script)  
+[`build.js`](build.js) holds the command we use to call emscripten.  
 [`webpack.config.js`](webpack.config.js) holds the webpack config we use to bundle the emscripten output together with your script.
 
-This template requires [docker](https://docs.docker.com/install/) for providing the emscripten build environment.
+This template requires [docker](https://docs.docker.com/install/) for providing the emscripten build environment. While we believe this provides the best developer experience, if you wish to not use docker you can delete the check for docker and the docker parts of the build command in `build.js`
 
 #### Wrangler
 
