@@ -16,18 +16,18 @@ addEventListener('fetch', event => {
 let emscripten_module = new Promise((resolve, reject) => {
   emscripten({
     instantiateWasm(info, receive) {
-      let instance = new WebAssembly.Instance(wasmprogram, info);
-      receive(instance);
-      return instance.exports;
-    }
-  }).then((module) => {
+      let instance = new WebAssembly.Instance(wasmprogram, info)
+      receive(instance)
+      return instance.exports
+    },
+  }).then(module => {
     resolve({
-      init: module.cwrap("init", "number", ["number"]),
-      resize: module.cwrap("resize", "number", ["number", "number"]),
-      module: module
-    });
-  });
-});
+      init: module.cwrap('init', 'number', ['number']),
+      resize: module.cwrap('resize', 'number', ['number', 'number']),
+      module: module,
+    })
+  })
+})
 
 /**
  * Fetch and log a request
@@ -37,28 +37,28 @@ async function handleRequest(event) {
   let request = event.request
   let response = await fetch(request)
 
-  let type = response.headers.get("Content-Type") || ""
-  if (!type.startsWith("image/")) return response
+  let type = response.headers.get('Content-Type') || ''
+  if (!type.startsWith('image/')) return response
 
-  let width = new URL(request.url).searchParams.get("width")
+  let width = new URL(request.url).searchParams.get('width')
   if (!width) return response
 
-  let resizer = await emscripten_module;
+  let resizer = await emscripten_module
 
-  let bytes = new Uint8Array(await response.arrayBuffer());
+  let bytes = new Uint8Array(await response.arrayBuffer())
 
   let ptr = resizer.init(bytes.length)
 
-  console.log("ptr: " + ptr)
-  console.log("bytes length: " + bytes.length);
+  console.log('ptr: ' + ptr)
+  console.log('bytes length: ' + bytes.length)
 
-  resizer.module.HEAPU8.set(bytes, ptr);
+  resizer.module.HEAPU8.set(bytes, ptr)
 
   let newSize = resizer.resize(bytes.length, parseInt(width))
 
   if (newSize == 0) {
-    console.log("resize didnt happen");
-    return new Response(bytes, response);
+    console.log('resize didnt happen')
+    return new Response(bytes, response)
   }
 
   let resultBytes = resizer.module.HEAPU8.slice(ptr, ptr + newSize)
@@ -66,7 +66,7 @@ async function handleRequest(event) {
   // Create a new response with the image bytes. Our resizer module always
   // outputs JPEG regardless of input type, so change the header.
   let newResponse = new Response(resultBytes, response)
-  newResponse.headers.set("Content-Type", "image/jpeg")
+  newResponse.headers.set('Content-Type', 'image/jpeg')
 
   // Return the response.
   return newResponse
