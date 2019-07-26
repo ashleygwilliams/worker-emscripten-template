@@ -49,15 +49,11 @@ async function handleRequest(event) {
 
   let ptr = resizer.init(bytes.length)
 
-  console.log('ptr: ' + ptr)
-  console.log('bytes length: ' + bytes.length)
-
   resizer.module.HEAPU8.set(bytes, ptr)
 
   let newSize = resizer.resize(bytes.length, parseInt(width))
 
   if (newSize == 0) {
-    console.log('resize didnt happen')
     return new Response(bytes, response)
   }
 

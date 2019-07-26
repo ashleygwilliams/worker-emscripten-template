@@ -59,23 +59,16 @@ size_t EMSCRIPTEN_KEEPALIVE resize(size_t filesize, size_t target_width) {
   unsigned char* pixels = stbi_load_from_memory(
       image_buffer, filesize, &width, &height, &channels, 0);
 
-  printf("filesize %d, target width %d\n", filesize, target_width);
-  printf("loaded from memory\n");
-
   if (pixels == NULL) {
     // Image not recognized, so just pass it through.
-    printf("pixels were null\n");
     return 0;
   }
 
   if (width <= target_width) {
     // Target width is larger than actual. We only want to make
     // things smaller, so return the original image.
-    printf("width larger than actual\n");
     return 0;
   }
-
-  fflush(stdout);
 
   // Calculate the desired height to maintain aspect ratio.
   size_t target_height = height * target_width / width;
