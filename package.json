@@ -19,7 +19,7 @@
   "devDependencies": {
     "copy-webpack-plugin": "^5.0.3",
     "exports-loader": "^0.7.0",
-    "shelljs": "^0.8.3",
+    "shelljs": "^0.8.5",
     "webpack-shell-plugin-next": "^0.6.4"
   },
   "dependencies": {}
